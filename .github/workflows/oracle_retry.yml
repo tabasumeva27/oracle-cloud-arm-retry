@@ -1,0 +1,28 @@
+name: 24/7 Oracle Cloud Server Hunter
+
+on:
+  schedule:
+    - cron: '0 */4 * * *'
+  workflow_dispatch:
+
+jobs:
+  hunt:
+    runs-on: ubuntu-latest
+    timeout-minutes: 360
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Install dependencies
+        run: |
+          pip install -r requirements.txt
+
+      - name: Run 24/7 Oracle Hunter Bot
+        run: |
+          chmod 600 oci_api_key.pem
+          python -u retry.py
